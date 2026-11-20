@@ -234,24 +234,22 @@ int main()
 	WCORE_INFO("wplatform example: v{}", to_string(CurrentVersion));
 
 	platform::set_error_handler([](const platform::Error& error)
-		{
-			std::cerr << "GLFW " << error.code << ": " << error.message << '\n';
-		});
-			": " << error.message << '\n';
+	{
+		std::cerr << "GLFW " << error.code << ": " << error.message << '\n';
+	});
+
 	platform::Config platformConfig;
 	platformConfig.joystickHatsAsButtons = false;
 
 	if (!platform::init(platformConfig))
-
-		WCORE_ERROR("Failed to initialize the platform");
 	{
-		std::cerr << "Failed to initialize platform" << ")\n";
+		WCORE_ERROR("Failed to initialize the platform");
 		return 1;
 	}
+
+	WCORE_INFO("Backend: {}", platform::backend_name());
 	WCORE_INFO("GLFW: v{}", to_string(platform::glfw_version()));
 	WCORE_INFO("Raw mouse motion: {}", cursor::raw_motion_supported());
-	WCORE_INFO("Backend: {}", platform::backend_name());
-	WCORE_INFO("GLFW: v{}", wplatform::to_string(platform::glfw_version()));
 
 	log_monitors();
 	log_joysticks();
@@ -275,6 +273,8 @@ int main()
 			WCORE_ERROR("Failed to create the window");
 			platform::shutdown();
 			return 1;
+		}
+
 		add_listeners(*window);
 
 		const auto icon{ make_icon() };
@@ -405,7 +405,7 @@ int main()
 				log_monitors();
 				log_joysticks();
 			}
-		{
+
 			const auto cursorPosition{ input->cursor() };
 			if (input->mouse_pressed(events::MouseButton::left))
 			{
@@ -418,9 +418,8 @@ int main()
 		}
 
 		WCORE_INFO("Window closed");
-			}
-		}
 	}
 
 	platform::shutdown();
+	return 0;
 }
